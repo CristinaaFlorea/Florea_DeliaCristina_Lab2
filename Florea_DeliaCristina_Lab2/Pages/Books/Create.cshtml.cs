@@ -22,6 +22,12 @@ namespace Florea_DeliaCristina_Lab2.Pages.Books
 
         public IActionResult OnGet()
         {
+            var authorList = _context.Author.Select(x => new
+            {
+                x.Id,
+                FullName = x.LastName + " " + x.FirstName
+            });
+
             ViewData["AuthorId"] = new SelectList(_context.Set<Author>(), "Id", "FullName");
             ViewData["PublisherID"] = new SelectList(_context.Set<Publisher>(), "ID", "PublisherName");
 
