@@ -17,8 +17,9 @@ namespace Florea_DeliaCristina_Lab2.Models
         [DataType(DataType.Date)]
         public DateTime PublishingDate { get; set; }
         public int? PublisherID { get; set; }
-        public int? AuthorID { get; set; } //important!!
+        public int? AuthorId { get; set; } //important!!
         public Publisher? Publisher { get; set; } //navigation property
         public Author? Authors { get; set; } //navigation property
+        public ICollection<BookCategory>? BookCategories { get; set; }
     }
 }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Florea_DeliaCristina_Lab2.Data;
 using Florea_DeliaCristina_Lab2.Models;
 
-namespace Florea_DeliaCristina_Lab2.Pages.Authors
+namespace Florea_DeliaCristina_Lab2.Pages.Categories
 {
     public class EditModel : PageModel
     {
@@ -21,21 +21,21 @@ namespace Florea_DeliaCristina_Lab2.Pages.Authors
         }
 
         [BindProperty]
-        public Author Author { get; set; } = default!;
+        public Category Category { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Author == null)
+            if (id == null || _context.Category == null)
             {
                 return NotFound();
             }
 
-            var author =  await _context.Author.FirstOrDefaultAsync(m => m.Id == id);
-            if (author == null)
+            var category =  await _context.Category.FirstOrDefaultAsync(m => m.ID == id);
+            if (category == null)
             {
                 return NotFound();
             }
-            Author = author;
+            Category = category;
             return Page();
         }
 
@@ -48,7 +48,7 @@ namespace Florea_DeliaCristina_Lab2.Pages.Authors
                 return Page();
             }
 
-            _context.Attach(Author).State = EntityState.Modified;
+            _context.Attach(Category).State = EntityState.Modified;
 
             try
             {
@@ -56,7 +56,7 @@ namespace Florea_DeliaCristina_Lab2.Pages.Authors
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AuthorExists(Author.Id))
+                if (!CategoryExists(Category.ID))
                 {
                     return NotFound();
                 }
@@ -69,9 +69,9 @@ namespace Florea_DeliaCristina_Lab2.Pages.Authors
             return RedirectToPage("./Index");
         }
 
-        private bool AuthorExists(int id)
+        private bool CategoryExists(int id)
         {
-          return _context.Author.Any(e => e.Id == id);
+          return _context.Category.Any(e => e.ID == id);
         }
     }
 }
