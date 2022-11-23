@@ -8,9 +8,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Florea_DeliaCristina_Lab2.Data;
 using Florea_DeliaCristina_Lab2.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace Florea_DeliaCristina_Lab2.Pages.Books
 {
+    [Authorize(Roles = "Admin")]
     public class CreateModel : BookCategoriesPageModel
     {
         private readonly Florea_DeliaCristina_Lab2.Data.Florea_DeliaCristina_Lab2Context _context;
@@ -24,11 +27,11 @@ namespace Florea_DeliaCristina_Lab2.Pages.Books
         {
             var authorList = _context.Author.Select(x => new
             {
-                x.Id,
+                x.ID,
                 FullName = x.LastName + " " + x.FirstName
             });
 
-            ViewData["AuthorId"] = new SelectList(_context.Set<Author>(), "Id", "FullName");
+            ViewData["AuthorId"] = new SelectList(_context.Set<Author>(), "ID", "FullName");
             ViewData["PublisherID"] = new SelectList(_context.Set<Publisher>(), "ID", "PublisherName");
 
             var book = new Book();

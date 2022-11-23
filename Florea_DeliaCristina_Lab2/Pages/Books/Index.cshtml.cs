@@ -38,19 +38,18 @@ namespace Florea_DeliaCristina_Lab2.Pages.Books
             CurrentFilter = searchString;
 
             BookD.Books = await _context.Book
+               .Include(b => b.Author)
                .Include(b => b.Publisher)
                .Include(b => b.BookCategories)
                .ThenInclude(b => b.Category)
-               .Include(b => b.Author)
                .AsNoTracking()
                .OrderBy(b => b.Title)
                .ToListAsync();
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                BookD.Books = BookD.Books.Where(s => s.Authors.FirstName.Contains(searchString)
-                                                //daca scriu author imi da eroare
-               || s.Authors.LastName.Contains(searchString) // dacda scriu author imi da eroare
+                BookD.Books = BookD.Books.Where(s => s.Author.FirstName.Contains(searchString)
+               || s.Author.LastName.Contains(searchString) 
                || s.Title.Contains(searchString));
 
                 if (id != null)
@@ -69,7 +68,7 @@ namespace Florea_DeliaCristina_Lab2.Pages.Books
                         break;
                     case "author_desc":
                         BookD.Books = BookD.Books.OrderByDescending(s =>
-                       s.Authors.FullName); // daca scriu Author imi da eroare
+                       s.Author.FullName); // daca scriu Author imi da eroare
                         break;
                 }
             }

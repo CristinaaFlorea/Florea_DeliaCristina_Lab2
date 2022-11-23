@@ -8,12 +8,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Florea_DeliaCristina_Lab2.Data;
 using Florea_DeliaCristina_Lab2.Models;
-using Florea_DeliaCristina_Lab2.Migrations;
-using Author = Florea_DeliaCristina_Lab2.Migrations.Author;  //lab 3 punctul 15 ??
-using Publisher = Florea_DeliaCristina_Lab2.Migrations.Publisher;  //lab 3 punctul 15 ??
+using System.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Florea_DeliaCristina_Lab2.Pages.Books
 {
+    [Authorize(Roles = "Admin")]
     public class EditModel : BookCategoriesPageModel
     {
         private readonly Florea_DeliaCristina_Lab2.Data.Florea_DeliaCristina_Lab2Context _context;
@@ -35,6 +35,7 @@ namespace Florea_DeliaCristina_Lab2.Pages.Books
 
             //se va include Author conform cu sarcina de la lab 2
             Book = await _context.Book
+                .Include(b=>b.Author)
             .Include(b => b.Publisher)
             .Include(b => b.BookCategories).ThenInclude(b => b.Category)
             .AsNoTracking()
@@ -51,12 +52,12 @@ namespace Florea_DeliaCristina_Lab2.Pages.Books
 
             var authorList = _context.Author.Select(x => new
             {
-                x.Id,
+                x.ID,
                 FullName = x.LastName + " " + x.FirstName
             });
 
             ViewData["PublisherID"] = new SelectList(_context.Set<Publisher>(), "ID","PublisherName");
-            ViewData["AuthorId"] = new SelectList(_context.Set<Author>(), "Id", "FullName");
+            ViewData["AuthorId"] = new SelectList(_context.Set<Author>(), "ID", "FullName");
             return Page();
         }
 
@@ -88,7 +89,7 @@ selectedCategories)
             if (await TryUpdateModelAsync<Book>(
                  bookToUpdate,
                  "Book",
-                 i => i.Title, i => i.Author,
+                 i => i.Title, i => i.AuthorID,
                  i => i.Price, i => i.PublishingDate, i => i.PublisherID))
             {
                 UpdateBookCategories(_context, selectedCategories, bookToUpdate);
